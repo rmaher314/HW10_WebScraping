@@ -31,7 +31,8 @@
     "    mars_news[\"news_title\"] = soup.find(\"div\", class_=\"content_title\").get_text()\n",
     "    mars_news[\"news_p\"] = soup.find(\"a\", class_=\"href\").get_text()\n",
     "\n",
-    "    return mars_news"
+    "    return mars_news\n",
+    "\n"
    ]
   },
   {
