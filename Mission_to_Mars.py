@@ -1,67 +1,68 @@
-{
- "cells": [
-  {
-   "cell_type": "code",
-   "execution_count": 5,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "from splinter import Browser\n",
-    "from bs4 import BeautifulSoup\n",
-    "\n",
-    "\n",
-    "def init_browser():\n",
-    "    # @NOTE: Replace the path with your actual path to the chromedriver\n",
-    "    executable_path = {\"executable_path\": \"chromedriver\"}\n",
-    "    return Browser(\"chrome\", **executable_path, headless=False)\n",
-    "\n",
-    "\n",
-    "def scrape():\n",
-    "    browser = init_browser()\n",
-    "    # create surf_data dict that we can insert into mongo\n",
-    "    mars_news = {}\n",
-    "\n",
-    "    # visit unsplash.com\n",
-    "    url = \"https://mars.nasa.gov/news/\"\n",
-    "    browser.visit(url)\n",
-    "\n",
-    "    html = browser.html\n",
-    "    soup = BeautifulSoup(html, \"html.parser\")\n",
-    "\n",
-    "    mars_news[\"news_title\"] = soup.find(\"div\", class_=\"content_title\").get_text()\n",
-    "    mars_news[\"news_p\"] = soup.find(\"a\", class_=\"href\").get_text()\n",
-    "\n",
-    "    return mars_news\n",
-    "\n"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": []
-  }
- ],
- "metadata": {
-  "kernelspec": {
-   "display_name": "Python 3",
-   "language": "python",
-   "name": "python3"
-  },
-  "language_info": {
-   "codemirror_mode": {
-    "name": "ipython",
-    "version": 3
-   },
-   "file_extension": ".py",
-   "mimetype": "text/x-python",
-   "name": "python",
-   "nbconvert_exporter": "python",
-   "pygments_lexer": "ipython3",
-   "version": "3.6.10"
-  }
- },
- "nbformat": 4,
- "nbformat_minor": 4
-}
+from splinter import Browser
+from bs4 import BeautifulSoup
+import requests
+import time
+import pandas as pd
+
+
+#Mars Facts Table
+url = 'https://space-facts.com/mars/'
+tables = pd.read_html(url)
+type(tables)
+tables[1]
+
+mars_df = tables[0]
+mars_df.columns = ['Data','Mars Facts']
+mars_df
+
+mars_df.set_index('Data', inplace=True)
+mars_df
+
+html_table = mars_df.to_html()
+html_table
+
+mars_df.to_html('mars_table.html')
+
+#Web Scraping
+def init_browser():
+    executable_path = {"executable_path": "../chromedriver"}
+    return 
+    feature = Browser("chrome", **executable_path, headless=False)
+    
+
+#JLP - Mars Space Images - Featured Image
+url = 'https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars'
+feature.visit(url)
+
+time.sleep(1)
+
+full_image_elem = feature.find_by_id('full_image')
+full_image_elem.click()
+
+html = feature.html
+soup = BeautifulSoup(html, "html.parser")
+
+img_url_rel = soup.select_one('figure.lede a img').get("src")
+img_url_rel
+
+#NASA Mars News
+
+#Collecting the mars news form nasa.gov.
+url2 = 'https://mars.nasa.gov/news/'
+feature.visit(url2)
+
+time.sleep(1)
+
+html = feature.html
+soup = BeautifulSoup(html, "html.parser")
+headlines = soup.select_one('ul.item_list li.slide')
+
+headlines.find("div", class_='content_title')
+
+news_title = headlines.find("div", class_='content_title').get_text()
+news_title
+
+article_teaser = headlines.find("div", class_='article_teaser_body').get_text()
+article_teaser
+
+#Mars Hemispheres
