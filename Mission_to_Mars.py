@@ -30,7 +30,9 @@ def init_browser():
     feature = Browser("chrome", **executable_path, headless=False)
     
 def scrape():
+    browser = init_browser()
 #JLP - Mars Space Images - Featured Image
+    mars_data = {}
     url = 'https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars'
     feature.visit(url)
 
@@ -43,15 +45,15 @@ def scrape():
     soup = BeautifulSoup(html, "html.parser")
 
     img_url_rel = soup.select_one('figure.lede a img').get("src")
-
+    mars_data["src"] = img_url_rel
 
 #NASA Mars News
 
 #Collecting the mars news form nasa.gov.
-def scrape():
-    url2 = 'https://mars.nasa.gov/news/'
-    feature.visit(url2)
 
+    url2 = 'https://mars.nasa.gov/news/'
+    browser.visit(url2)
+    
     time.sleep(1)
 
     html = feature.html
@@ -65,6 +67,8 @@ def scrape():
 
     article_teaser = headlines.find("div", class_='article_teaser_body').get_text()
     article_teaser
-
+    mars_data["article_teaser_body"] = article_teaser
 #Mars Hemispheres
-def scrape():
+
+    browser.quit()
+    return mars_data
