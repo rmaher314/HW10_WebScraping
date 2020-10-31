@@ -86,17 +86,20 @@ def scrape():
     print(hemisphere_text)
     mars_data["hemisphere_text"] = " " + hemisphere_text
     counter = 0
-
+    
+    imgUrl = ''
 
     for a in soup.find_all('a', {'class':'itemLink'}):
         counter = counter + 1
         hemisphereurl = baseUrl + a['href']
         if counter % 2 == 0:
             print (hemisphereurl)
+            imgUrl += " " + hemisphereurl
             feature.visit(url)
             soup.find_all('h3')
             feature.back()
-    mars_data["hemisphere.text", "hemisphereurl"] = article_teaser
+    mars_data["imgUrl"] = imgUrl
+    #mars_data["hemisphere.text", "hemisphereurl"] = article_teaser
 
     html = feature.html
     soup = BeautifulSoup(html, "html.parser")
