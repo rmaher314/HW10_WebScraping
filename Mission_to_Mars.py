@@ -82,6 +82,9 @@ def scrape():
     
     for hemisphere in hemispheres:
         print(hemisphere.text)
+        hemisphere_text += hemisphere.text
+    print(hemisphere_text)
+    mars_data["hemisphere_text"] = " " + hemisphere_text
     counter = 0
 
 
