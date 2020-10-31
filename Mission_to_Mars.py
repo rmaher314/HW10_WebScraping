@@ -69,6 +69,33 @@ def scrape():
     article_teaser
     mars_data["article_teaser_body"] = article_teaser
 #Mars Hemispheres
+    url3 = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&kl-targets&v1=mars'
+    feature.visit(url3)
+    time.sleep(2)
+    
+    links_found = feature.links.find_by_partial_href('/search/map/Mars/Viking/')
+    print(links_found)
+    
+    hemispheres = soup.find_all('h3')
+    
+    baseUrl = 'https://astrogeology.usgs.gov'
+    
+    for hemisphere in hemispheres:
+    print(hemisphere.text)
+    counter = 0
 
+
+    for a in soup.find_all('a', {'class':'itemLink'}):
+        counter = counter + 1
+        hemisphereurl = baseUrl + a['href']
+        if counter % 2 == 0:
+            print (hemisphereurl)
+            feature.visit(url)
+            soup.find_all('h3')
+            feature.back()
+    mars_data["hemisphere.text", "hemisphereurl"] = article_teaser
+
+    html = feature.html
+    soup = BeautifulSoup(html, "html.parser")
     browser.quit()
     return mars_data
