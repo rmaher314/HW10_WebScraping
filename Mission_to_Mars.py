@@ -81,7 +81,7 @@ def scrape():
     baseUrl = 'https://astrogeology.usgs.gov'
     
     for hemisphere in hemispheres:
-    print(hemisphere.text)
+        print(hemisphere.text)
     counter = 0
 
 
