@@ -68,23 +68,30 @@ def scrape():
     article_teaser = headlines.find("div", class_='article_teaser_body').get_text()
     article_teaser
     mars_data["article_teaser_body"] = article_teaser
+
+
 #Mars Hemispheres
     url3 = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&kl-targets&v1=mars'
     feature.visit(url3)
     time.sleep(2)
     
+    html = feature.html
+    soup = BeautifulSoup(html, "html.parser")
+    
     links_found = feature.links.find_by_partial_href('/search/map/Mars/Viking/')
-    print(links_found)
+    
     
     hemispheres = soup.find_all('h3')
-    
     baseUrl = 'https://astrogeology.usgs.gov'
+    hemisphere_text = ''
+    
     
     for hemisphere in hemispheres:
-        print(hemisphere.text)
+        #print(hemisphere.text)
         hemisphere_text += hemisphere.text
-    print(hemisphere_text)
+    #print(hemisphere_text)
     mars_data["hemisphere_text"] = " " + hemisphere_text
+    
     counter = 0
     
     imgUrl = ''
@@ -93,11 +100,25 @@ def scrape():
         counter = counter + 1
         hemisphereurl = baseUrl + a['href']
         if counter % 2 == 0:
-            print (hemisphereurl)
-            imgUrl += " " + hemisphereurl
-            feature.visit(url)
-            soup.find_all('h3')
+            #print (hemisphereurl)
+            #imgUrl += " " + hemisphereurl
+            feature.visit(hemisphereurl)
+            time.sleep(2)
+        
+            html = feature.html
+            soup2 = BeautifulSoup(html, "html.parser")
+            full_image_elem = feature.find_by_id('wide-image-toggle')
+            full_image_elem.click()
+            divs = feature.find_by_tag("img")#[class='wide-image']
+            matches = soup2.findAll("img", {"class":"wide-image"})
+            
+            for match in matches:
+                imgUrl += baseUrl + match['src'] + " "
+                #print(imgUrl)
             feature.back()
+            time.sleep(2)
+            
+            
     mars_data["imgUrl"] = imgUrl
     #mars_data["hemisphere.text", "hemisphereurl"] = article_teaser
 
