@@ -22,6 +22,7 @@ def index():
 def scraper():
     mars_data = mongo.db.mars_data
     data = Mission_to_Mars.scrape()
+    print("updating database")
     mars_data.update({}, data, upsert=True)
     return redirect("/", code=302)
 
