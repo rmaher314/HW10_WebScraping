@@ -85,39 +85,43 @@ def scrape():
     baseUrl = 'https://astrogeology.usgs.gov'
     
     hemisphere_info = []
-    
+    imageUrl = ''
     counter = 0
     
     
 
    
-for a in soup.find_all('a', {'class':'itemLink'}):
-    counter = counter + 1
-    hemisphereurl = baseUrl + a['href']
-    if counter % 2 == 0:
-        #print (hemisphereurl)
-        #imgUrl += hemisphereurl + " "
-        feature.visit(hemisphereurl)
-        time.sleep(2)
+    for a in soup.find_all('a', {'class':'itemLink'}):
+        counter = counter + 1
+        hemisphereurl = baseUrl + a['href']
+        if counter % 2 == 0:
+            #print (hemisphereurl)
+            #imgUrl += hemisphereurl + " "
+            feature.visit(hemisphereurl)
+            time.sleep(2)
+            
+            html = feature.html
+            soup2 = BeautifulSoup(html, "html.parser")
+            
+            hemisphere_name = soup2.find("h2", {"class":"title"}).text
+            print(hemisphere_name)
+            
         
+            divs = feature.find_by_tag("img")#[class='wide-image']
+            matches = soup2.find("img", {"class":"wide-image"}).get("src")
+            imageUrl = baseUrl + matches
+            
+            hemisphere_info += {
+                "name": hemisphere_name,
+                "link": imageUrl
+            }
+                
+            feature.back()
+            time.sleep(2)
+                
+                
+        mars_data["hemisphere_info"]=hemisphere_info
         html = feature.html
-        soup2 = BeautifulSoup(html, "html.parser")
-        
-        hemisphere_name = soup2.find("h2", {"class":"title"}).text
-        print(hemisphere_name)
-        
-       
-        divs = feature.find_by_tag("img")#[class='wide-image']
-        matches = soup2.find("img", {"class":"wide-image"}).get("src")
-        print(baseUrl + matches)
-
-            
-        feature.back()
-        time.sleep(2)
-            
-            
-
-    html = feature.html
-    soup = BeautifulSoup(html, "html.parser")
-    browser.quit()
+        soup = BeautifulSoup(html, "html.parser")
+        browser.quit()
     return mars_data
