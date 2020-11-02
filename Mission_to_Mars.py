@@ -83,44 +83,39 @@ def scrape():
     
     hemispheres = soup.find_all('h3')
     baseUrl = 'https://astrogeology.usgs.gov'
-    hemisphere_text = ''
     
-    
-    for hemisphere in hemispheres:
-        #print(hemisphere.text)
-        hemisphere_text += hemisphere.text
-    #print(hemisphere_text)
-    mars_data["hemisphere_text"] = " " + hemisphere_text
+    hemisphere_info = []
     
     counter = 0
     
-    imgUrl = ''
+    
 
-    for a in soup.find_all('a', {'class':'itemLink'}):
-        counter = counter + 1
-        hemisphereurl = baseUrl + a['href']
-        if counter % 2 == 0:
-            #print (hemisphereurl)
-            #imgUrl += " " + hemisphereurl
-            feature.visit(hemisphereurl)
-            time.sleep(2)
+   
+for a in soup.find_all('a', {'class':'itemLink'}):
+    counter = counter + 1
+    hemisphereurl = baseUrl + a['href']
+    if counter % 2 == 0:
+        #print (hemisphereurl)
+        #imgUrl += hemisphereurl + " "
+        feature.visit(hemisphereurl)
+        time.sleep(2)
         
-            html = feature.html
-            soup2 = BeautifulSoup(html, "html.parser")
-            full_image_elem = feature.find_by_id('wide-image-toggle')
-            full_image_elem.click()
-            divs = feature.find_by_tag("img")#[class='wide-image']
-            matches = soup2.findAll("img", {"class":"wide-image"})
+        html = feature.html
+        soup2 = BeautifulSoup(html, "html.parser")
+        
+        hemisphere_name = soup2.find("h2", {"class":"title"}).text
+        print(hemisphere_name)
+        
+       
+        divs = feature.find_by_tag("img")#[class='wide-image']
+        matches = soup2.find("img", {"class":"wide-image"}).get("src")
+        print(baseUrl + matches)
+
             
-            for match in matches:
-                imgUrl += baseUrl + match['src'] + " "
-                #print(imgUrl)
-            feature.back()
-            time.sleep(2)
+        feature.back()
+        time.sleep(2)
             
             
-    mars_data["imgUrl"] = imgUrl
-    #mars_data["hemisphere.text", "hemisphereurl"] = article_teaser
 
     html = feature.html
     soup = BeautifulSoup(html, "html.parser")
