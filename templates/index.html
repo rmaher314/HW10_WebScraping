@@ -29,7 +29,7 @@
       <div class="row" id= "featured_image">
         <div class="col-md-8">
           <h2>Featured Mars Image</h2>
-          <img src="{{mars_data.img_url_rel}}" class="img-responsive fit-image">
+          <img src="{{mars_data.feature_img}}" class="img-responsive fit-image">
         </div>
         <div class="col-6 col-md-4">
           <table border="1" class="dataframe">
@@ -85,42 +85,58 @@
           </table>
         </div>
       </div>
-
       <div class="row" id="mars_latest_news">
         <div class="col-md-12">
         </div>
       </div>
 
-      <div class="row" id="mars_latest_news">
+           <div class="row" id="mars_latest_news">
         <div class="col-md-12 center-block text-center">
           <h2>Mars Hemispheres</h2>
         </div>
       </div>
       <br>
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <img src="{{mars_data.hemisphere_info.link0}}" class="img-responsive fit-image">
-          <h3>{{mars_data.hemisphere_info.name0}}</h2>
+    <div class="container">           
+          
+    {% for hemisphere in mars_data.hemisphere_info %}  
+      {% set outer_loop = loop %}         
+        {% if outer_loop.index == 1 %} 
+        <div class="row">            
+          <div class="col-md-6">
+            <img src="{{hemisphere.url}}" class="img-responsive fit-image">
+            <h2>{{hemisphere.title}}</h2> 
+          </div>
+        {% endif %}
+        {% if outer_loop.index == 2 %}
+          <div class="col-md-6">           
+            <img src="{{hemisphere.url}}" class="img-responsive fit-image">
+            <h2>{{hemisphere.title}}</h2> 
+          </div> 
         </div>
-        <div class="col-md-6">
-          <img src="{{mars_data.hemisphere_info.link1}}" class="img-responsive fit-image">
-          <h3>{{mars_data.hemisphere_info.name1}}</h2> 
+      {% endif %}            
+
+      {% if outer_loop.index == 3 %}
+        <div class="row">             
+          <div class="col-md-6">
+            <img src="{{hemisphere.url}}" class="img-responsive fit-image">
+            <h2>{{hemisphere.title}}</h2> 
+          </div>
+      {% endif %}
+      {% if outer_loop.index == 4 %}
+          <div class="col-md-6">
+            <img src="{{hemisphere.url}}" class="img-responsive fit-image">
+            <h2>{{hemisphere.title}}</h2> 
+          </div> 
         </div>
-      </div>
+      {% endif %}  
+  {% endfor %}
+        </div>
+    
      
-      <div class="row">
-        <div class="col-md-6">
-          <img src="{{mars_data.hemisphere_info.link2}}" class="img-responsive fit-image">
-          <h3>{{mars_data.hemisphere_info.name2}}</h2>
-        </div>
-        <div class="col-md-6">
-          <img src="{{mars_data.hemisphere_info.link3}}" class="img-responsive fit-image">
-          <h3>{{mars_data.hemisphere_info.name3}}</h2>
-        </div>
-      </div>
+     
+
     </div>  
-    </div> -->  
+    </div>  
     
     </div>
 
